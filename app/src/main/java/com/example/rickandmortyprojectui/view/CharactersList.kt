@@ -1,11 +1,17 @@
 package com.example.rickandmortyprojectui.view
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.rickandmortyprojectui.R
+import com.example.rickandmortyprojectui.RetrofitClient
+import com.example.rickandmortyprojectui.model.Characters
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -28,6 +34,18 @@ class CharactersList : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
+        RetrofitClient.getInstance().getCharacters(1).enqueue(object: Callback<Characters> {
+            override fun onResponse(call: Call<Characters>, response: Response<Characters>) {
+                val statusCode: Int = response.code();
+                val character: Characters? = response.body();
+                Log.d("BIDULE", "$character")
+            }
+
+            override fun onFailure(call: Call<Characters>, t: Throwable) {
+                // Log error here since request failed
+            }
+        });
     }
 
     override fun onCreateView(
