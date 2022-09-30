@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.rickandmortyprojectui.R
-import com.example.rickandmortyprojectui.RetrofitClient
+import com.example.rickandmortyprojectui.RetrofitService
 import com.example.rickandmortyprojectui.model.Characters
 import retrofit2.Call
 import retrofit2.Callback
@@ -35,11 +35,10 @@ class CharactersList : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
 
-        RetrofitClient.getInstance().getCharacters(1).enqueue(object: Callback<Characters> {
+        RetrofitService.getInstance().getCharacters(1).enqueue(object: Callback<Characters> {
             override fun onResponse(call: Call<Characters>, response: Response<Characters>) {
                 val statusCode: Int = response.code();
                 val character: Characters? = response.body();
-                Log.d("BIDULE", "$character")
             }
 
             override fun onFailure(call: Call<Characters>, t: Throwable) {

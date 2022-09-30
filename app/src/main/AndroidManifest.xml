@@ -22,7 +22,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".ActivityResultLauncher"
+            android:name=".view.ActivityResultLauncher"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

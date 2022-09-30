@@ -1,11 +1,10 @@
-package com.example.rickandmortyprojectui
+package com.example.rickandmortyprojectui.view
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
-import com.example.rickandmortyprojectui.view.MainActivity
+import com.example.rickandmortyprojectui.R
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
