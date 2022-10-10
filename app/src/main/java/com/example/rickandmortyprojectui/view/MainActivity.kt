@@ -12,6 +12,5 @@ class MainActivity : AppCompatActivity() {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragmentContainerView, CharactersListFragment.newInstance())
         transaction.commit()
-
     }
 }

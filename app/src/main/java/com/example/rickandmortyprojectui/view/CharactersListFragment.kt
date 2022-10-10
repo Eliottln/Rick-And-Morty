@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rickandmortyprojectui.R
 import com.example.rickandmortyprojectui.model.RetrofitService
@@ -16,8 +17,8 @@ import com.example.rickandmortyprojectui.viewmodel.CharactersViewModel
 import com.example.rickandmortyprojectui.viewmodel.MyViewModelFactory
 
 class CharactersListFragment : Fragment() {
-    lateinit var viewModel: CharactersViewModel
-    private val adapter = CharactersListAdapter()
+    private lateinit var viewModel: CharactersViewModel
+    private var adapter: CharactersListAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,12 +28,12 @@ class CharactersListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        val binding = inflater.inflate(R.layout.fragment_characters_list, container, false)
         val retrofitService = RetrofitService.getInstance()
         val mainRepository = MainRepository(retrofitService)
-        val binding = inflater.inflate(R.layout.fragment_characters_list, container, false)
-        val charactersRV: RecyclerView = binding.findViewById(R.id.characters_rv)
-        charactersRV.adapter = adapter
+        viewModel = ViewModelProvider(this, MyViewModelFactory(mainRepository))[CharactersViewModel::class.java]
+
+        adapter = viewModel.getCharacters()?.results?.let { CharactersListAdapter(it) }
 
         viewModel = ViewModelProvider(
             this,
@@ -40,15 +41,24 @@ class CharactersListFragment : Fragment() {
         )[CharactersViewModel::class.java]
 
         viewModel.charactersList.observe(viewLifecycleOwner) {
-            adapter.setCharacters(it)
+            adapter?.setCharacters(it)
         }
 
         viewModel.errorMessage.observe(viewLifecycleOwner) {
             Toast.makeText(this.context, it, Toast.LENGTH_SHORT).show()
         }
 
-        viewModel.getCharacters()
+        val charactersRV: RecyclerView = binding.findViewById(R.id.characters_rv)
+        charactersRV.adapter = adapter
+//        charactersRV.layoutManager = LinearLayoutManager(activity)
+
         return binding
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        adapter?.notifyDataSetChanged()
+
     }
 
     companion object {

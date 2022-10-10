@@ -22,8 +22,14 @@ class ActivityResultLauncher : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_result_launcher)
 
-        val btnSignOut: Button = findViewById(R.id.btn_signout)
+        val btnSignOut: Button = findViewById(R.id.signout_btn)
         btnSignOut.setOnClickListener { signOut() }
+
+        val btnCharacters: Button = findViewById(R.id.characters_btn)
+        btnCharacters.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
 
         createSignInIntent()
     }
@@ -50,9 +56,6 @@ class ActivityResultLauncher : AppCompatActivity() {
         if (result.resultCode == RESULT_OK) {
             // Successfully signed in
             val user = FirebaseAuth.getInstance().currentUser
-
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
 
         } else {
             createSignInIntent()
