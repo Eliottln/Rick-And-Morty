@@ -17,7 +17,7 @@ class CharactersViewModel constructor(private val mainRepository: MainRepository
     }
     val loading = MutableLiveData<Boolean>()
 
-    fun getCharacters(): Characters? {
+    fun getCharacters() {
         viewModelScope.launch {
 
             val response = mainRepository.getCharacters(1)
@@ -25,15 +25,14 @@ class CharactersViewModel constructor(private val mainRepository: MainRepository
             withContext(Dispatchers.Main) {
                 try {
                     Log.d("RESPONSE", "$response")
-                    charactersList.postValue(response)
+                    charactersList.value= response
+                    Log.d("charactersList", "${charactersList.value}")
                     loading.value = false
                 } catch (e: Exception) {
                     Log.d("RESPONSE", "$response")
                 }
             }
         }
-
-        return charactersList.value
     }
 
     private fun onError(message: String) {

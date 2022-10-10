@@ -4,15 +4,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextClock
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rickandmortyprojectui.R
 import com.example.rickandmortyprojectui.model.Characters
 import com.example.rickandmortyprojectui.model.Results
 import com.squareup.picasso.Picasso
 
-class CharactersListAdapter (private var charactersList: ArrayList<Results>) : RecyclerView.Adapter<CharactersListAdapter.ViewHolder>() {
+class CharactersListAdapter : RecyclerView.Adapter<CharactersListAdapter.ViewHolder>() {
 
-//    lateinit var charactersList: ArrayList<Results>
+    lateinit var charactersList: ArrayList<Results>
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         // Create a new view, which defines the UI of the list item
@@ -27,20 +29,28 @@ class CharactersListAdapter (private var charactersList: ArrayList<Results>) : R
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         Picasso.get().load(charactersList[position].image).into(holder.avatar)
+        holder.name.text = charactersList[position].name
+        holder.status.text = charactersList[position].status
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         var avatar: ImageView
+        var name: TextView
+        var status: TextView
+        var location: TextView
+        var origin: TextView
 
         init {
             avatar = view.findViewById(R.id.avatar_iv)
+            name = view.findViewById(R.id.name_tv)
+            status = view.findViewById(R.id.status_tv)
+            location = view.findViewById(R.id.location_tv)
+            origin = view.findViewById(R.id.origin_tv)
         }
     }
 
-    @JvmName("setCharacters1")
     fun setCharacters(it: Characters) {
         this.charactersList = it.results
-        notifyDataSetChanged()
     }
 }
