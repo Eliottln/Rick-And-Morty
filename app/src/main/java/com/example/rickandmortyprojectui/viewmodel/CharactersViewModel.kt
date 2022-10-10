@@ -1,52 +1,47 @@
 package com.example.rickandmortyprojectui.viewmodel
 
-import androidx.lifecycle.LiveData
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.rickandmortyprojectui.model.Characters
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.example.rickandmortyprojectui.model.MainRepository
+import kotlinx.coroutines.*
 
-class CharactersViewModel: ViewModel() {
+class CharactersViewModel constructor(private val mainRepository: MainRepository) : ViewModel() {
 
-    private var charactersListLiveData= MutableLiveData<ArrayList<Characters>>()
-    fun getCustomersRepository(): LiveData<ArrayList<Characters>>? {
-        return charactersListLiveData
+    val errorMessage = MutableLiveData<String>()
+    val charactersList = MutableLiveData<Characters>()
+    val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        onError("Exception handled: ${throwable.localizedMessage}")
     }
-    init {
-        charactersListLiveData= Repository.getCharacters()!!
-    }
+    val loading = MutableLiveData<Boolean>()
 
-}
+    fun getCharacters() {
+        viewModelScope.launch {
 
-class Repository {
+            val response = mainRepository.getCharacters(1)
 
-    companion object {
-        fun getCharacters(): MutableLiveData<ArrayList<Characters>>? {
-
-            val charactersListLiveData: MutableLiveData<ArrayList<Characters>> = MutableLiveData<ArrayList<Characters>>()
-
-            CoroutineScope(Dispatchers.Default).launch {
-
-                launch(Dispatchers.IO) {
-                    val apiInterface = ApiInterfaceBuilder.getApiInterface()
-                    val response = apiInterface?.getCustomerList("")
-                    withContext(Dispatchers.Default)
-                    {
-                        response?.let {
-                            if (response.isSuccessful()) {
-                                charactersListLiveData.postValue(response.body()!!.data)
-                            }
-
-                        }
-                    }
+            withContext(Dispatchers.Main) {
+                try {
+                    Log.d("RESPONSE", "$response")
+                    charactersList.postValue(response)
+                    loading.value = false
+                } catch (e: Exception) {
+                    Log.d("RESPONSE", "$response")
                 }
-
             }
-            return charactersListLiveData
         }
 
     }
+
+    private fun onError(message: String) {
+        errorMessage.value = message
+        loading.value = false
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+    }
+
 }
