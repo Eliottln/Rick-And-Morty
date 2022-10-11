@@ -14,7 +14,7 @@ import com.squareup.picasso.Picasso
 
 class CharactersListAdapter : RecyclerView.Adapter<CharactersListAdapter.ViewHolder>() {
 
-    lateinit var charactersList: ArrayList<Results>
+    var charactersList: ArrayList<Results> = arrayListOf()
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         // Create a new view, which defines the UI of the list item
@@ -51,6 +51,7 @@ class CharactersListAdapter : RecyclerView.Adapter<CharactersListAdapter.ViewHol
     }
 
     fun setCharacters(it: Characters) {
-        this.charactersList = it.results
+        this.charactersList.addAll(it.results)
+        notifyDataSetChanged()
     }
 }

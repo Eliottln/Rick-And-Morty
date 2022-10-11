@@ -17,10 +17,10 @@ class CharactersViewModel constructor(private val mainRepository: MainRepository
     }
     val loading = MutableLiveData<Boolean>()
 
-    fun getCharacters() {
+    fun getCharacters(page: Int) {
         viewModelScope.launch {
 
-            val response = mainRepository.getCharacters(1)
+            val response = mainRepository.getCharacters(page)
 
             withContext(Dispatchers.Main) {
                 try {

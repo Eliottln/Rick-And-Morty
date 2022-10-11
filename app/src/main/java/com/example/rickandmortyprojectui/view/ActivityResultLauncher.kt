@@ -27,7 +27,7 @@ class ActivityResultLauncher : AppCompatActivity() {
 
         val btnCharacters: Button = findViewById(R.id.characters_btn)
         btnCharacters.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, CharactersListActivity::class.java)
             startActivity(intent)
         }
 
