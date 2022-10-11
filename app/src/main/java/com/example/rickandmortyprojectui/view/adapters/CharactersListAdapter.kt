@@ -30,7 +30,9 @@ class CharactersListAdapter : RecyclerView.Adapter<CharactersListAdapter.ViewHol
 
         Picasso.get().load(charactersList[position].image).into(holder.avatar)
         holder.name.text = charactersList[position].name
-        holder.status.text = charactersList[position].status
+        holder.status.text = charactersList[position].status.plus(" - ").plus(charactersList[position].species)
+        holder.location.text = charactersList[position].location?.name
+        holder.origin.text = charactersList[position].origin?.name
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

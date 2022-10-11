@@ -24,6 +24,8 @@ class ActivityResultLauncher : AppCompatActivity() {
 
         val btnSignOut: Button = findViewById(R.id.signout_btn)
         btnSignOut.setOnClickListener { signOut() }
+        val btnSignIn: Button = findViewById(R.id.signin_btn)
+        btnSignIn.setOnClickListener { createSignInIntent() }
 
         val btnCharacters: Button = findViewById(R.id.characters_btn)
         btnCharacters.setOnClickListener {
@@ -31,7 +33,6 @@ class ActivityResultLauncher : AppCompatActivity() {
             startActivity(intent)
         }
 
-        createSignInIntent()
     }
 
     private fun createSignInIntent() {

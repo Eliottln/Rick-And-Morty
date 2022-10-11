@@ -15,19 +15,14 @@ class CharactersViewModel constructor(private val mainRepository: MainRepository
     val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         onError("Exception handled: ${throwable.localizedMessage}")
     }
-    val loading = MutableLiveData<Boolean>()
 
     fun getCharacters(page: Int) {
         viewModelScope.launch {
-
             val response = mainRepository.getCharacters(page)
-
             withContext(Dispatchers.Main) {
                 try {
                     Log.d("RESPONSE", "$response")
                     charactersList.value= response
-                    Log.d("charactersList", "${charactersList.value}")
-                    loading.value = false
                 } catch (e: Exception) {
                     Log.d("RESPONSE", "$response")
                 }
@@ -37,7 +32,6 @@ class CharactersViewModel constructor(private val mainRepository: MainRepository
 
     private fun onError(message: String) {
         errorMessage.value = message
-        loading.value = false
     }
 
     override fun onCleared() {

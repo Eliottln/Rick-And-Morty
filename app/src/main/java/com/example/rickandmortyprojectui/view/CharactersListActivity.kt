@@ -20,6 +20,7 @@ import com.example.rickandmortyprojectui.viewmodel.MyViewModelFactory
 class CharactersListActivity : AppCompatActivity() {
     private lateinit var viewModel: CharactersViewModel
     private var page: Int = 1
+    private var maxPage: Int? = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +42,7 @@ class CharactersListActivity : AppCompatActivity() {
 
         viewModel.charactersList.observe(this) {
             if (charactersRV.adapter == null) {
+                maxPage = it.info?.pages
                 charactersRV.layoutManager = layoutManager
                 charactersRV.adapter = adapter
             }
@@ -53,18 +55,22 @@ class CharactersListActivity : AppCompatActivity() {
 
         charactersRV.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView!!, dx, dy)
+                super.onScrolled(recyclerView, dx, dy)
 
                 val visibleItemCount = layoutManager.childCount
                 val totalItemCount = layoutManager.itemCount
                 val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
 
                 if (visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0) {
-                    viewModel.getCharacters(page++)
+                    if (page <= maxPage!!) {
+                        viewModel.getCharacters(page)
+                        page++
+                    }
                 }
 
             }
         })
-        viewModel.getCharacters(page++)
+        viewModel.getCharacters(page)
+        page++
     }
 }
