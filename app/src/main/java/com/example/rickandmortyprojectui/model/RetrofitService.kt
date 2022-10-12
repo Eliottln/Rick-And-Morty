@@ -3,12 +3,16 @@ package com.example.rickandmortyprojectui.model
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface RetrofitService
 {
     @GET("character")
     suspend fun getCharacters(@Query("page") page: Int): Characters
+
+    @GET("character/{id}")
+    suspend fun getCharacter(@Path("id") id: Int): Results
 
     companion object {
         var retrofitService: RetrofitService? = null

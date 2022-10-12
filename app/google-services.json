@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "419058246532",
+    "firebase_url": "https://rickandmortyprojectui-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "rickandmortyprojectui",
     "storage_bucket": "rickandmortyprojectui.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "419058246532-80gh0fbebnj1h9bqj17j5ol8r8000gmm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.rickandmortyprojectui",
+            "certificate_hash": "9b8dc1859c1de4c72a259f557370b3ba5b34f94f"
+          }
+        },
         {
           "client_id": "419058246532-2csbc114330se67mh7q4tdd0h7g65a9e.apps.googleusercontent.com",
           "client_type": 3

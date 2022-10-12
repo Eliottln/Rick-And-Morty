@@ -38,11 +38,6 @@ class CharactersListActivity : AppCompatActivity(), OnItemClickListener {
         val adapter = CharactersListAdapter(this)
         val layoutManager = LinearLayoutManager(this)
 
-        viewModel = ViewModelProvider(
-            this,
-            MyViewModelFactory(mainRepository)
-        )[CharactersViewModel::class.java]
-
         viewModel.charactersList.observe(this) {
             if (charactersRV.adapter == null) {
                 maxPage = it.info?.pages
@@ -79,6 +74,7 @@ class CharactersListActivity : AppCompatActivity(), OnItemClickListener {
 
     override fun onItemClicked(results: Results) {
         val intent = Intent(this, CharacterDetails::class.java)
+        intent.putExtra("id", results.id)
         startActivity(intent)
     }
 }

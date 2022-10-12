@@ -6,20 +6,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rickandmortyprojectui.model.Characters
 import com.example.rickandmortyprojectui.model.MainRepository
-import kotlinx.coroutines.*
+import com.example.rickandmortyprojectui.model.Results
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class CharactersViewModel constructor(private val mainRepository: MainRepository) : ViewModel() {
+class DetailsViewModel constructor(private val mainRepository: MainRepository) : ViewModel() {
 
     val errorMessage = MutableLiveData<String>()
-    val charactersList = MutableLiveData<Characters>()
+    val character = MutableLiveData<Results>()
 
-    fun getCharacters(page: Int) {
+    fun getCharacter(id: Int) {
         viewModelScope.launch {
-            val response = mainRepository.getCharacters(page)
+            val response = mainRepository.getCharacter(id)
             withContext(Dispatchers.Main) {
                 try {
                     Log.d("RESPONSE", "$response")
-                    charactersList.value= response
+                    character.value= response
                 } catch (e: Exception) {
                     onError(e.toString())
                     Log.d("RESPONSE", "$response")
