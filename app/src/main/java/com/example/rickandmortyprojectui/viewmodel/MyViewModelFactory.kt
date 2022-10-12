@@ -9,7 +9,11 @@ class MyViewModelFactory constructor(private val repository: MainRepository): Vi
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return if (modelClass.isAssignableFrom(CharactersViewModel::class.java)) {
             CharactersViewModel(this.repository) as T
-        } else {
+        }
+        else if (modelClass.isAssignableFrom(DetailsViewModel::class.java)) {
+            DetailsViewModel(this.repository) as T
+        }
+        else {
             throw IllegalArgumentException("ViewModel Not Found")
         }
     }

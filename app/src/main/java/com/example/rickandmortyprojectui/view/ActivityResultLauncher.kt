@@ -10,17 +10,17 @@ import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.firebase.auth.ActionCodeSettings
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 
 class ActivityResultLauncher : AppCompatActivity() {
-    private val signInLauncher = registerForActivityResult(
-        FirebaseAuthUIActivityResultContract()
-    ) { res ->
-        this.onSignInResult(res)
-    }
+    private val signInLauncher = registerForActivityResult(FirebaseAuthUIActivityResultContract())
+    { res -> this.onSignInResult(res) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_result_launcher)
+
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true)
 
         val btnSignOut: Button = findViewById(R.id.signout_btn)
         btnSignOut.setOnClickListener { signOut() }

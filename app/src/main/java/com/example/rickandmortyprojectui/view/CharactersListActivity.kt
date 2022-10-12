@@ -2,11 +2,8 @@ package com.example.rickandmortyprojectui.view
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,7 +15,6 @@ import com.example.rickandmortyprojectui.view.adapters.CharactersListAdapter
 import com.example.rickandmortyprojectui.view.adapters.OnItemClickListener
 import com.example.rickandmortyprojectui.viewmodel.CharactersViewModel
 import com.example.rickandmortyprojectui.viewmodel.MyViewModelFactory
-
 
 class CharactersListActivity : AppCompatActivity(), OnItemClickListener {
     private lateinit var viewModel: CharactersViewModel
@@ -33,8 +29,8 @@ class CharactersListActivity : AppCompatActivity(), OnItemClickListener {
 
         val retrofitService = RetrofitService.getInstance()
         val mainRepository = MainRepository(retrofitService)
-
         viewModel = ViewModelProvider(this, MyViewModelFactory(mainRepository))[CharactersViewModel::class.java]
+
         val adapter = CharactersListAdapter(this)
         val layoutManager = LinearLayoutManager(this)
 
@@ -73,7 +69,7 @@ class CharactersListActivity : AppCompatActivity(), OnItemClickListener {
     }
 
     override fun onItemClicked(results: Results) {
-        val intent = Intent(this, CharacterDetails::class.java)
+        val intent = Intent(this, CharacterDetailsActivity::class.java)
         intent.putExtra("id", results.id)
         startActivity(intent)
     }

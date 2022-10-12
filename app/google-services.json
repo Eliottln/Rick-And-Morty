@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "419058246532-l71kbhneq4litph8bps9en56vr6q6qdq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.rickandmortyprojectui",
+            "certificate_hash": "3336c7bed163b6dfa9d34f7825c1a9652d96c8cc"
+          }
+        },
+        {
           "client_id": "419058246532-2csbc114330se67mh7q4tdd0h7g65a9e.apps.googleusercontent.com",
           "client_type": 3
         }

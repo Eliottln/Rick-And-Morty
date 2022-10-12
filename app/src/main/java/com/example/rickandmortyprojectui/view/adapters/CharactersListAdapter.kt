@@ -3,9 +3,7 @@ package com.example.rickandmortyprojectui.view.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ImageView
-import android.widget.TextClock
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
@@ -21,7 +19,7 @@ class CharactersListAdapter (val itemClickListener: OnItemClickListener) : Recyc
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         // Create a new view, which defines the UI of the list item
         val view = LayoutInflater.from(viewGroup.context)
-            .inflate(R.layout.item_characters_list, viewGroup, false)
+            .inflate(R.layout.item_character, viewGroup, false)
 
         return ViewHolder(view)
     }
@@ -34,7 +32,6 @@ class CharactersListAdapter (val itemClickListener: OnItemClickListener) : Recyc
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        var card: CardView
         var avatar: ImageView
         var name: TextView
         var status: TextView
@@ -42,7 +39,6 @@ class CharactersListAdapter (val itemClickListener: OnItemClickListener) : Recyc
         var origin: TextView
 
         init {
-            card = view.findViewById(R.id.card_item)
             avatar = view.findViewById(R.id.avatar_iv)
             name = view.findViewById(R.id.name_tv)
             status = view.findViewById(R.id.status_tv)
