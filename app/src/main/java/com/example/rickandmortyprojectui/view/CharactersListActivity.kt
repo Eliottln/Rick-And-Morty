@@ -1,5 +1,6 @@
 package com.example.rickandmortyprojectui.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -11,13 +12,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rickandmortyprojectui.R
 import com.example.rickandmortyprojectui.model.MainRepository
+import com.example.rickandmortyprojectui.model.Results
 import com.example.rickandmortyprojectui.model.RetrofitService
 import com.example.rickandmortyprojectui.view.adapters.CharactersListAdapter
+import com.example.rickandmortyprojectui.view.adapters.OnItemClickListener
 import com.example.rickandmortyprojectui.viewmodel.CharactersViewModel
 import com.example.rickandmortyprojectui.viewmodel.MyViewModelFactory
 
 
-class CharactersListActivity : AppCompatActivity() {
+class CharactersListActivity : AppCompatActivity(), OnItemClickListener {
     private lateinit var viewModel: CharactersViewModel
     private var page: Int = 1
     private var maxPage: Int? = 1
@@ -32,7 +35,7 @@ class CharactersListActivity : AppCompatActivity() {
         val mainRepository = MainRepository(retrofitService)
 
         viewModel = ViewModelProvider(this, MyViewModelFactory(mainRepository))[CharactersViewModel::class.java]
-        val adapter = CharactersListAdapter()
+        val adapter = CharactersListAdapter(this)
         val layoutManager = LinearLayoutManager(this)
 
         viewModel = ViewModelProvider(
@@ -72,5 +75,10 @@ class CharactersListActivity : AppCompatActivity() {
         })
         viewModel.getCharacters(page)
         page++
+    }
+
+    override fun onItemClicked(results: Results) {
+        val intent = Intent(this, CharacterDetails::class.java)
+        startActivity(intent)
     }
 }

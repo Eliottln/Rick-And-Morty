@@ -3,16 +3,18 @@ package com.example.rickandmortyprojectui.view.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ImageView
 import android.widget.TextClock
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rickandmortyprojectui.R
 import com.example.rickandmortyprojectui.model.Characters
 import com.example.rickandmortyprojectui.model.Results
 import com.squareup.picasso.Picasso
 
-class CharactersListAdapter : RecyclerView.Adapter<CharactersListAdapter.ViewHolder>() {
+class CharactersListAdapter (val itemClickListener: OnItemClickListener) : RecyclerView.Adapter<CharactersListAdapter.ViewHolder>() {
 
     var charactersList: ArrayList<Results> = arrayListOf()
 
@@ -27,16 +29,12 @@ class CharactersListAdapter : RecyclerView.Adapter<CharactersListAdapter.ViewHol
     override fun getItemCount() = charactersList.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
-        Picasso.get().load(charactersList[position].image).into(holder.avatar)
-        holder.name.text = charactersList[position].name
-        holder.status.text = charactersList[position].status.plus(" - ").plus(charactersList[position].species)
-        holder.location.text = charactersList[position].location?.name
-        holder.origin.text = charactersList[position].origin?.name
+        holder.bind(charactersList[position], itemClickListener)
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
+        var card: CardView
         var avatar: ImageView
         var name: TextView
         var status: TextView
@@ -44,11 +42,25 @@ class CharactersListAdapter : RecyclerView.Adapter<CharactersListAdapter.ViewHol
         var origin: TextView
 
         init {
+            card = view.findViewById(R.id.card_item)
             avatar = view.findViewById(R.id.avatar_iv)
             name = view.findViewById(R.id.name_tv)
             status = view.findViewById(R.id.status_tv)
             location = view.findViewById(R.id.location_tv)
             origin = view.findViewById(R.id.origin_tv)
+        }
+
+        fun bind(results: Results, clickListener: OnItemClickListener)
+        {
+            Picasso.get().load(results.image).into(avatar)
+            name.text = results.name
+            status.text = results.status.plus(" - ").plus(results.species)
+            location.text = results.location?.name
+            origin.text = results.origin?.name
+
+            itemView.setOnClickListener {
+                clickListener.onItemClicked(results)
+            }
         }
     }
 
@@ -56,4 +68,8 @@ class CharactersListAdapter : RecyclerView.Adapter<CharactersListAdapter.ViewHol
         this.charactersList.addAll(it.results)
         notifyDataSetChanged()
     }
+}
+
+interface OnItemClickListener {
+    fun onItemClicked(results: Results)
 }
