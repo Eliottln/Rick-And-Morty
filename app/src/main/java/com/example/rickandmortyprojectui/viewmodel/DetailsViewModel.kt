@@ -19,7 +19,7 @@ class DetailsViewModel constructor(private val mainRepository: MainRepository) :
     private var database: FirebaseDatabase = FirebaseDatabase.getInstance()
     val errorMessage = MutableLiveData<String>()
     val character = MutableLiveData<Results>()
-    val successAddComment = MutableLiveData<Boolean>()
+    val newComment = MutableLiveData<Comment>()
     val commentsArray = MutableLiveData<ArrayList<Comment>>()
 
     fun getCharacter(id: Int) {
@@ -57,8 +57,11 @@ class DetailsViewModel constructor(private val mainRepository: MainRepository) :
             .child("character")
             .child("$id")
             .push()
-        FirebaseAuth.getInstance().currentUser?.displayName?.let { commentsRef.child("username").setValue(it) }
+        val username = FirebaseAuth.getInstance().currentUser?.displayName
+        commentsRef.child("username").setValue(username)
         commentsRef.child("content").setValue(comment)
+
+        newComment.value = Comment(username,comment)
     }
 
 }

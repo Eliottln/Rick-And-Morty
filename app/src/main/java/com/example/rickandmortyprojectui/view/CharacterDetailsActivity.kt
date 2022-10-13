@@ -56,8 +56,12 @@ class CharacterDetailsActivity: AppCompatActivity() {
             name.text = it.name
         }
 
+        viewModel.newComment.observe(this) {
+
+        }
+
         viewModel.commentsArray.observe(this) {
-            if (it.isNotEmpty()) {
+            if (commentsRV.adapter == null) {
                 val adapter = CommentsListAdapter(it)
                 commentsRV.adapter = adapter
                 adapter?.notifyDataSetChanged()

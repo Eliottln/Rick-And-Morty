@@ -41,6 +41,7 @@ class CommentsListAdapter(var commentsList: ArrayList<Comment>): RecyclerView.Ad
         }
     }
 
+//    fun setCommmentsList()
     fun addComment(comment: Comment){
         commentsList.add(comment)
         notifyItemInserted(itemCount-1)
