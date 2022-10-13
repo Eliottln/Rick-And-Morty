@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.rickandmortyprojectui.model.Comment
 import com.example.rickandmortyprojectui.model.MainRepository
 import com.example.rickandmortyprojectui.model.Results
 import com.google.firebase.auth.FirebaseAuth
@@ -19,9 +20,7 @@ class DetailsViewModel constructor(private val mainRepository: MainRepository) :
     val errorMessage = MutableLiveData<String>()
     val character = MutableLiveData<Results>()
     val successAddComment = MutableLiveData<Boolean>()
-    val successGetComments = MutableLiveData<Boolean>()
-    val commentsArray = MutableLiveData<ArrayList<String>>()
-    val usernamesArray = MutableLiveData<ArrayList<String>>()
+    val commentsArray = MutableLiveData<ArrayList<Comment>>()
 
     fun getCharacter(id: Int) {
         viewModelScope.launch {
@@ -48,22 +47,18 @@ class DetailsViewModel constructor(private val mainRepository: MainRepository) :
             .child("$id")
             .get()
             .addOnSuccessListener { task ->
-                val list = task.value
-                Log.d("TASKKK", "${list}")
-//                arrayOf(list).forEach {
-//                    it.last().key?.let { it1 -> usernamesArray.value?.add(it1) }
-//                    commentsArray.value?.add(it.children.last().value.toString())
-//                }
-                Log.d("COMMENTLIST", "${usernamesArray.value}")
-                successGetComments.value = true
+                commentsArray.postValue(task.children.map { it.getValue(Comment::class.java) } as ArrayList<Comment>?)
             }
     }
+
 
     fun sendComment(comment: String, id: Int) {
         val commentsRef: DatabaseReference = database.getReference("comments")
             .child("character")
             .child("$id")
-        FirebaseAuth.getInstance().currentUser?.displayName?.let { commentsRef.push().child(it).setValue(comment) };
+            .push()
+        FirebaseAuth.getInstance().currentUser?.displayName?.let { commentsRef.child("username").setValue(it) }
+        commentsRef.child("content").setValue(comment)
     }
 
 }

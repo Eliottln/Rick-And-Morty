@@ -6,8 +6,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rickandmortyprojectui.R
+import com.example.rickandmortyprojectui.model.Comment
 
-class CommentsListAdapter(var commentsList: ArrayList<String>): RecyclerView.Adapter<CommentsListAdapter.ViewHolder>() {
+class CommentsListAdapter(var commentsList: ArrayList<Comment>): RecyclerView.Adapter<CommentsListAdapter.ViewHolder>() {
 
 //    var commentsList: ArrayList<String> = arrayListOf()
 
@@ -33,13 +34,14 @@ class CommentsListAdapter(var commentsList: ArrayList<String>): RecyclerView.Ada
             commentContent = view.findViewById(R.id.comment_content_tv)
         }
 
-        fun bind(content: String)
+        fun bind(content: Comment)
         {
-            username.text = content
+            username.text = content.username
+            commentContent.text = content.content
         }
     }
 
-    fun addComment(comment: String){
+    fun addComment(comment: Comment){
         commentsList.add(comment)
         notifyItemInserted(itemCount-1)
         notifyItemRangeChanged(itemCount-1, itemCount)

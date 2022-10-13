@@ -4,6 +4,8 @@ package com.example.rickandmortyprojectui.view
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -15,7 +17,7 @@ import com.example.rickandmortyprojectui.model.RetrofitService
 import com.example.rickandmortyprojectui.view.adapters.CommentsListAdapter
 import com.example.rickandmortyprojectui.viewmodel.DetailsViewModel
 import com.example.rickandmortyprojectui.viewmodel.MyViewModelFactory
-import com.google.firebase.database.FirebaseDatabase
+import com.squareup.picasso.Picasso
 
 class CharacterDetailsActivity: AppCompatActivity() {
 
@@ -31,6 +33,8 @@ class CharacterDetailsActivity: AppCompatActivity() {
 
         id = intent.getIntExtra("id", 1)
 
+        val avatar: ImageView = findViewById(R.id.avatar_details_iv)
+        val name: TextView = findViewById(R.id.name_details_tv)
         val commentsRV: RecyclerView = findViewById(R.id.comments_rv)
         val layoutManager = LinearLayoutManager(this)
         commentsRV.layoutManager = layoutManager
@@ -48,14 +52,13 @@ class CharacterDetailsActivity: AppCompatActivity() {
         }
 
         viewModel.character.observe(this) {
-
+            Picasso.get().load(it.image).into(avatar)
+            name.text = it.name
         }
 
-        viewModel.successGetComments.observe(this) {
-            if (it) {
-                val adapter = viewModel.commentsArray.value?.let {
-                        it1 -> CommentsListAdapter(it1)
-                }
+        viewModel.commentsArray.observe(this) {
+            if (it.isNotEmpty()) {
+                val adapter = CommentsListAdapter(it)
                 commentsRV.adapter = adapter
                 adapter?.notifyDataSetChanged()
             }
