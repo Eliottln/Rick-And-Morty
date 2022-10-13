@@ -2,8 +2,10 @@ package com.example.rickandmortyprojectui.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +28,7 @@ class CharactersListActivity : AppCompatActivity(), OnItemClickListener {
         setContentView(R.layout.activity_characters_list)
 
         val charactersRV: RecyclerView = findViewById(R.id.characters_rv)
+        val numberOfResults: TextView = findViewById(R.id.number_characters_tv)
 
         val retrofitService = RetrofitService.getInstance()
         val mainRepository = MainRepository(retrofitService)
@@ -41,6 +44,8 @@ class CharactersListActivity : AppCompatActivity(), OnItemClickListener {
                 charactersRV.adapter = adapter
             }
             adapter.setCharacters(it)
+            numberOfResults.text = it.info?.count.toString().plus(" results")
+            numberOfResults.isVisible = true
         }
 
         viewModel.errorMessage.observe(this) {
