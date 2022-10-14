@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.rickandmortyprojectui.R
 import com.example.rickandmortyprojectui.model.Comment
 
-class CommentsListAdapter(var commentsList: ArrayList<Comment>): RecyclerView.Adapter<CommentsListAdapter.ViewHolder>() {
+class CommentsListAdapter: RecyclerView.Adapter<CommentsListAdapter.ViewHolder>() {
 
-//    var commentsList: ArrayList<String> = arrayListOf()
+    private var commentsList: ArrayList<Comment> = arrayListOf()
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(viewGroup.context)
@@ -41,7 +41,10 @@ class CommentsListAdapter(var commentsList: ArrayList<Comment>): RecyclerView.Ad
         }
     }
 
-//    fun setCommmentsList()
+    fun setCommentList(list: ArrayList<Comment>) {
+        this.commentsList = list
+    }
+
     fun addComment(comment: Comment){
         commentsList.add(comment)
         notifyItemInserted(itemCount-1)

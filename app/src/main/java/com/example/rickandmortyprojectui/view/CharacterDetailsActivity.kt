@@ -37,9 +37,10 @@ class CharacterDetailsActivity: AppCompatActivity() {
         val name: TextView = findViewById(R.id.name_details_tv)
         val commentsRV: RecyclerView = findViewById(R.id.comments_rv)
         val layoutManager = LinearLayoutManager(this)
-        commentsRV.layoutManager = layoutManager
         val input: EditText = findViewById(R.id.comment_pt)
         val sendButton: Button = findViewById(R.id.send_btn)
+        commentsRV.layoutManager = layoutManager
+        val adapter = CommentsListAdapter()
 
         sendButton.setOnClickListener {
             val text: String = input.text.toString()
@@ -57,14 +58,14 @@ class CharacterDetailsActivity: AppCompatActivity() {
         }
 
         viewModel.newComment.observe(this) {
-
+            adapter.addComment(it)
         }
 
         viewModel.commentsArray.observe(this) {
             if (commentsRV.adapter == null) {
-                val adapter = CommentsListAdapter(it)
                 commentsRV.adapter = adapter
-                adapter?.notifyDataSetChanged()
+                adapter.setCommentList(it)
+                adapter.notifyDataSetChanged()
             }
         }
 
