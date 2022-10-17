@@ -1,9 +1,11 @@
 package com.example.rickandmortyprojectui.view
 
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import androidx.core.view.isVisible
 import com.example.rickandmortyprojectui.R
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
@@ -15,17 +17,31 @@ import com.google.firebase.database.FirebaseDatabase
 class ActivityResultLauncher : AppCompatActivity() {
     private val signInLauncher = registerForActivityResult(FirebaseAuthUIActivityResultContract())
     { res -> this.onSignInResult(res) }
+    private lateinit var sharedPreference: SharedPreferences
+    private lateinit var btnSignOut: Button
+    private lateinit var btnSignIn: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_result_launcher)
 
+        sharedPreference = getSharedPreferences("CONNEXION", MODE_PRIVATE)
+        val isLogged = sharedPreference.getBoolean("isLogged",false)
+
         FirebaseDatabase.getInstance().setPersistenceEnabled(true)
 
-        val btnSignOut: Button = findViewById(R.id.signout_btn)
-        btnSignOut.setOnClickListener { signOut() }
-        val btnSignIn: Button = findViewById(R.id.signin_btn)
+        btnSignOut = findViewById(R.id.signout_btn)
+        btnSignIn = findViewById(R.id.signin_btn)
         btnSignIn.setOnClickListener { createSignInIntent() }
+        btnSignOut.setOnClickListener { signOut() }
+        if (isLogged) {
+            btnSignIn.isVisible = false
+            btnSignOut.isVisible = true
+        }
+        else {
+            btnSignIn.isVisible = true
+            btnSignOut.isVisible = false
+        }
 
         val btnCharacters: Button = findViewById(R.id.characters_btn)
         btnCharacters.setOnClickListener {
@@ -36,7 +52,6 @@ class ActivityResultLauncher : AppCompatActivity() {
     }
 
     private fun createSignInIntent() {
-        // Choose authentication providers
         val providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build(),
 //            AuthUI.IdpConfig.PhoneBuilder().build(),
@@ -44,7 +59,6 @@ class ActivityResultLauncher : AppCompatActivity() {
 //            AuthUI.IdpConfig.FacebookBuilder().build(),
 //            AuthUI.IdpConfig.TwitterBuilder().build())
 
-        // Create and launch sign-in intent
         val signInIntent =  AuthUI.getInstance()
             .createSignInIntentBuilder()
             .setAvailableProviders(providers)
@@ -53,11 +67,12 @@ class ActivityResultLauncher : AppCompatActivity() {
     }
 
     private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
-        val response = result.idpResponse
         if (result.resultCode == RESULT_OK) {
-            // Successfully signed in
-            val user = FirebaseAuth.getInstance().currentUser
-
+            val editor = sharedPreference.edit()
+            editor.putBoolean("isLogged", true)
+            editor.apply()
+            btnSignIn.isVisible = false
+            btnSignOut.isVisible = true
         } else {
             createSignInIntent()
         }
@@ -90,6 +105,11 @@ class ActivityResultLauncher : AppCompatActivity() {
         AuthUI.getInstance()
             .signOut(this)
             .addOnCompleteListener {
+                val editor = sharedPreference.edit()
+                editor.putBoolean("isLogged", false)
+                editor.apply()
+                btnSignIn.isVisible = true
+                btnSignOut.isVisible = false
                 createSignInIntent()
             }
     }
